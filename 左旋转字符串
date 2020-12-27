@@ -1,0 +1,36 @@
+字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。请定义一个函数实现字符串左旋转操作的功能。比如，输入字符串"abcdefg"和数字2，该函数将返回左旋转两位得到的结果"cdefgab"。
+示例 1：
+输入: s = "abcdefg", k = 2
+输出: "cdefgab"
+示例 2：
+输入: s = "lrloseumgh", k = 6
+输出: "umghlrlose"
+ 首先了解substring方法，作为String类下的方法,它有两种形式
+一、public String substring(int beginIndex)
+返回一个字符串，该字符串是此字符串的子字符串。 子字符串以指定索引处的字符开头，并扩展到该字符串的末尾。
+例子：
+"unhappy".substring(2) returns "happy"
+"Harbison".substring(3) returns "bison"
+"emptiness".substring(9) returns "" (an empty string)
+
+二、public String substring(int beginIndex,int endIndex)
+返回一个字符串，该字符串是此字符串的子字符串。 子串开始于指定beginIndex并延伸到字符索引endIndex - 1 。 因此，子串的长度为endIndex-beginIndex 。
+例子：
+"hamburger".substring(4, 8) returns "urge"
+"smiles".substring(1, 5) returns "mile"
+
+了解方法之后就可直接使用第二种方法，对字符串进行拼接。
+
+另一种解法就是直接return两个substring拼接后的结果
+return s.substring(n,s.length())+s.substring(0,n);
+
+代码
+
+class Solution {
+    public String reverseLeftWords(String s, int n) {
+        String substring = s.substring(n, s.length());
+        String substring2 = s.substring(0,n);
+        String substring3 = substring + substring2;
+        return substring3 ;
+    }
+}
