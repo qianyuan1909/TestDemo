@@ -1,0 +1,75 @@
+现有一个小写英文字母组成的字符串s和一个包含较短小写英文字符串的数组p，请设计一个高效算法，对于p中的每一个较短字符串，判断其是否为s的子串。
+给定一个string数组p和它的大小n，同时给定string s，为母串，请返回一个bool数组，每个元素代表p中的对应字符串是否为s的子串。保证p中的串长度小于等于8，且p中的串的个数小于等于500，同时保证s的长度小于等于1000。
+
+测试样例：
+[“a”,“b”,“c”,“d”],4,“abc”
+返回：[true,true,true,false]
+
+import java.util.*;
+public class Substr {
+    public static class Trie {
+        private final int ALPHABET_SIZE = 26;
+        private Trie[] children = new Trie[ALPHABET_SIZE];
+        boolean isEndOfWord = false;
+        public Trie() {}
+ 
+        public void insert(String word) {
+            Trie tmp = this;
+            for (char i : word.toCharArray()) {
+                if (tmp.children[i-'a'] == null) {
+                    tmp.children[i-'a'] = new Trie();
+                }
+                tmp = tmp.children[i-'a'];
+            }
+            tmp.isEndOfWord = true;
+        }
+ 
+        public boolean search(String word) {
+            Trie tmp = this;
+            for (char i : word.toCharArray()) {
+                if (tmp.children[i-'a'] == null) {
+                    return false;
+                }
+                tmp = tmp.children[i-'a'];
+            }
+            return tmp.isEndOfWord ? true : false;
+        }
+ 
+        public boolean startsWith(Trie tmp,String prefix) {
+            for (char i : prefix.toCharArray()) {
+                if (tmp.children[i-'a'] == null) {
+                    return false;
+                }
+                tmp = tmp.children[i-'a'];
+            }
+            return true;
+        }
+ 
+        public boolean has(Trie tmp,String word){
+            if(tmp.isEndOfWord == true) return false;
+            Character c = word.charAt(0);
+            boolean a = false;
+            if(tmp.children[c - 'a'] != null){
+                a = startsWith(tmp,word);
+            }
+            int temp = 0;
+            for (int i = 0; i < 26; i++) {
+                if(tmp.children[i] != null){
+                    temp = i;
+                    break;
+                }
+            }
+            return a||has(tmp.children[temp],word);
+        }
+    }
+    public boolean[] chkSubStr(String[] p, int n, String s) {
+        // write code here
+        Trie trie = new Trie();
+        trie.insert(s);
+        boolean[] res = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            if(trie.has(trie,p[i])) res[i] = true;
+        }
+        return res;
+    }
+}
