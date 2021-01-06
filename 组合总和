@@ -1,0 +1,66 @@
+给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+
+candidates 中的数字可以无限制重复被选取。
+
+说明：
+
+所有数字（包括 target）都是正整数。
+解集不能包含重复的组合。 
+示例 1：
+
+输入：candidates = [2,3,6,7], target = 7,
+所求解集为：
+[
+  [7],
+  [2,2,3]
+]
+示例 2：
+
+输入：candidates = [2,3,5], target = 8,
+所求解集为：
+[
+  [2,2,2,2],
+  [2,3,3],
+  [3,5]
+]
+解题思路
+个人理解回溯算法就是：递归 + 剪枝，都是有套路和模板的。
+递归的作用是向下穷举所有的可能结果，剪枝的作用是当递归到结束条件时返回上一个选择，重新开始选择，提升了效率。
+具体思路在注释中。
+
+代码
+
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        //建立res,保存所有结果。
+        List<List<Integer>> res = new ArrayList<>();
+        //建立list，储存满足target的单个选择
+        List<Integer> list = new ArrayList<>();
+        //回溯算法
+        dfs(res, list, candidates, 0, target);
+        return res;
+
+
+
+
+    }
+    public void dfs(List<List<Integer>> res, List<Integer> list, int[] candidates, int start, int target){
+        //结束条件
+        if (target < 0){
+            return;
+        }
+        if (target == 0){
+            res.add(new ArrayList<>(list));
+            return;
+        }
+        //选择candidate[i],进行遍历，start的作用是防止选择重复
+        for (int i = start; i < candidates.length; i++){
+            //list中加入candidates[i]
+            list.add(candidates[i]);
+            //向下进行DFS
+            dfs(res, list, candidates, i, target - candidates[i]);
+            //剪枝，去除最后一个选择
+            list.remove(list.size() - 1);
+        }
+    }
+}
