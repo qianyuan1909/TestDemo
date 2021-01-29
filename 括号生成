@@ -1,0 +1,30 @@
+class Solution {
+    ArrayList<String> results;
+    String temp="";
+    public List<String> generateParenthesis(int n) {
+        results=new ArrayList<String>();
+        makeParenthesis(temp,0,0,n);
+        return results;
+    }
+    public void makeParenthesis(String str,int left,int right,int n){
+        //如果有括号等于n表明括号组合已经达到上限，将字符串加入集合
+        if(right>=n){
+            results.add(str);
+            return;
+        }
+        //如果左括号的数量小于n表明尚未组合完成，继续增加左括号
+        if(left<n){
+            //由于java中String是引用传递，所以每次传递必须新建String对象
+            String n_temp=str+"(";
+            //递归进行深层调用
+            makeParenthesis(n_temp,left+1,right,n);
+        }
+        //如果右括号的数量小于n表明尚未组合完成，继续增加右括号
+        if(right<left){
+            //由于java中String是引用传递，所以每次传递必须新建String对象
+            String n_temp=str+")";
+            //递归进行深层调用
+            makeParenthesis(n_temp,left,right+1,n);
+        }
+    }
+}
